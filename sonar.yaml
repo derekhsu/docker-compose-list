@@ -1,0 +1,26 @@
+postgresql:
+  image: postgres:latest
+  environment:
+    - POSTGRES_USER=sonar
+    - POSTGRES_PASSWORD=5tgbhu8
+    - POSTGRES_DB=sonar
+  volumes:
+    - /opt/db/sonarqube/:/var/lib/postgresql/data
+  ports:
+    - "5432:5432"
+  #command:
+  #  - pg_ctl -D /var/lib/postgresql/data -l logfile start
+sonarqube:
+  image: sonarqube:latest
+  links:
+    - postgresql:db
+  environment:
+    - SONARQUBE_JDBC_USERNAME=sonar
+    - SONARQUBE_JDBC_PASSWORD=5tgbhu8
+    - SONARQUBE_JDBC_URL=jdbc:postgresql://db/sonar
+  ports:
+    - "9000:9000"
+    - "9092:9092"
+  volumes:
+    - /opt/sonarqube/data/:/opt/sonarqube/data
+    - /opt/sonarqube/extensions/:/opt/sonarqube/extensions
